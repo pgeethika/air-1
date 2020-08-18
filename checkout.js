@@ -5,6 +5,7 @@ const mongodb =  require('mongodb')
 // init router
 const router = express.Router()
 
+
 //connect db
 const connection_string = encodeURI('mongodb+srv://illenium_backend:Sc97s820skQKJWQb@illenium.lyr07.gcp.mongodb.net/illenium?retryWrites=true&w=majority')
 
@@ -37,18 +38,22 @@ res.send('Product not found')
 }
 })
 
-router.get('/update/:order_ID',  async (req, res) => {
+//Post method
+
+router.post('/update/:order_ID',  async (req, res) => {
 
     let productid = req.params.productid
     let quantity = parseInt(req.query.quantity)
     let price = parseInt(req.query.mrp)
     let totalprice = parseInt(req.query.totalprice)
+
+  
     
     jwt.verify(req, 'illenium', async (err, authData) => {
         if(err) {
             res.sendStatus(403)
         } else {
-            let result = await updateCart(authData['user']['email'], productid, quantity, mrp, totalprice)
+            let result = await updateCart(authData['user']['email'] ,quantity,mrp ,totalprice,productid)
 
             if(result > 0) {
                 res.json({
@@ -68,7 +73,7 @@ router.get('/update/:order_ID',  async (req, res) => {
         }
     })
 })
-//Post method
+
 
 
 
